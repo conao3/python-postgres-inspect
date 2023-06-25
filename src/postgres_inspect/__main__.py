@@ -1,16 +1,15 @@
-from . import settings
+import sqlalchemy
+import sqlalchemy.dialects.postgresql
+
+from . import db
+
+metadata = sqlalchemy.MetaData()
+metadata.reflect(bind=db.engine())
 
 
 def main():
-    print('hello world')
-    print(settings.settings)
-
-    import logging.config
-    import pathlib
-    import yaml
-
-    with open(pathlib.Path() / 'logging.conf.yml', 'r') as f:
-        logging.config.dictConfig(yaml.safe_load(f))
+    for table in metadata.sorted_tables:
+        print(sqlalchemy.schema.CreateTable(table).compile(dialect=sqlalchemy.dialects.postgresql.dialect()))
 
 
 if __name__ == '__main__':
