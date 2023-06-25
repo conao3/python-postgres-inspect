@@ -36,5 +36,6 @@ loggers:
   sqlalchemy.orm.mapper.Mapper: &warning
     level: WARNING
 
+  sqlalchemy.engine.Engine: *warning
   sqlalchemy.orm.relationships.RelationshipProperty: *warning
   sqlalchemy.orm.strategies.LazyLoader: *warning
