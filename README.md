@@ -29,8 +29,14 @@ $ poetry run python -m postgres_inspect
 
 ## Tips
 
+### SQL log
+
 postgres-inspect write SQL log into `/tmp/postgres_inspect_db.log`.
 
 ```bash
 $ tail -f /tmp/postgres_inspect_db.log
 ```
+
+### Sample output
+
+[Sample output is available](https://github.com/conao3/python-postgres-inspect/blob/master/sample/dvdrental/ddl.sql) for dvdrental database.
