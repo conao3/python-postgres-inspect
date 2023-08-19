@@ -1,15 +1,41 @@
-import sqlalchemy
-import sqlalchemy.dialects.postgresql
+import logging.config
+import argparse
+import sqlalchemy as sa
+import sqlalchemy.dialects.postgresql as sa_postgresql
 
-from . import db
 
-metadata = sqlalchemy.MetaData()
-metadata.reflect(bind=db.engine())
+logging.config.dictConfig({
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {'format': '[%(levelname)s] %(asctime)s - %(name)s - %(message)s'},
+    },
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler', 'level': 'DEBUG', 'formatter': 'default'},
+    },
+    'loggers': {
+        'postgres_inspect': {'level': 'DEBUG', 'handlers': ['console']},
+        'sqlalchemy': {'level': 'INFO', 'handlers': ['console']},
+    },
+})
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--url', help='DB URL like postgresql://{username}:{password}@{host}:{port}/{database}', required=True)
+
+    return parser.parse_args()
 
 
 def main():
+    args = parse_args()
+
+    engine: sa.Engine = sa.create_engine(args.url)
+    metadata = sa.MetaData()
+    metadata.reflect(bind=engine)
+
     for table in metadata.sorted_tables:
-        ddl = str(sqlalchemy.schema.CreateTable(table).compile(dialect=sqlalchemy.dialects.postgresql.dialect()))
+        ddl = str(sa.schema.CreateTable(table).compile(dialect=sa_postgresql.dialect()))
         print('\n'.join([elm.rstrip() for elm in ddl.splitlines()]) + ";")
 
 
