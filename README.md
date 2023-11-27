@@ -13,8 +13,24 @@ $ poetry install
 $ poetry run postgres-inspect --url postgresql://postgres:postgres@localhost:15432/dvdrental
 ```
 
-DB URL is like this `postgresql://{username}:{password}@{host}:{port}/{database}`.
-
 ### Sample output
 
 [Sample output is available](https://github.com/conao3/python-postgres-inspect/blob/master/sample/dvdrental/ddl.sql) for dvdrental database.
+
+## Options
+
+### `--url <URL>`
+
+Required.  DB URL like this `postgresql://{username}:{password}@{host}:{port}/{database}`.
+
+### `--schema <SCHEMA>`
+
+Optional, default is `public`.  Target schema name.
+
+### `--exclude <EXCLUDE>`
+
+Optional.  Exclude table name pattern using regex.
+
+Regex is matched with `re.fullmatch`.
+
+For example, if you want to exclude `user_20231127` and `store_20231127` and somethig like this, you can use `--exclude '.*_[0-9]*`.
