@@ -33,4 +33,5 @@ Optional.  Exclude table name pattern using regex.
 
 Regex is matched with `re.fullmatch`.
 
-For example, if you want to exclude `user_20231127` and `store_20231127` and somethig like this, you can use `--exclude '.*_[0-9]*`.
+For example, if you want to exclude `user_20231127` and `store_20231127` and somethig like this, you can use `--exclude '.*_[0-9]*'`.
+(Single quotes are required to avoid being recognised by the shell as a glob)
