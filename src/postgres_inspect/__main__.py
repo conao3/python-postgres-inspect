@@ -23,6 +23,7 @@ logging.config.dictConfig({
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', help='DB URL like postgresql://{username}:{password}@{host}:{port}/{database}', required=True)
+    parser.add_argument('--schema', help='Schema name')
 
     return parser.parse_args()
 
@@ -31,7 +32,7 @@ def main():
     args = parse_args()
 
     engine: sa.Engine = sa.create_engine(args.url)
-    metadata = sa.MetaData()
+    metadata = sa.MetaData(schema=args.schema)
     metadata.reflect(bind=engine)
 
     for table in metadata.sorted_tables:
