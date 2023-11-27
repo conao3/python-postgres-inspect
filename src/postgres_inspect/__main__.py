@@ -38,7 +38,7 @@ def main():
     metadata.reflect(bind=engine)
 
     for table in metadata.sorted_tables:
-        if args.exclude and re.fullmatch(args.exclude, table.name):
+        if args.exclude and re.search(args.exclude, table.name):
             continue
 
         ddl = str(sa.schema.CreateTable(table).compile(dialect=sa_postgresql.dialect()))
