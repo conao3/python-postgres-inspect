@@ -33,7 +33,7 @@ def parse_args() -> argparse.Namespace:
 def main():
     args = parse_args()
 
-    engine: sa.Engine = sa.create_engine(args.url)
+    engine = sa.create_engine(args.url)
     metadata = sa.MetaData(schema=args.schema)
     metadata.reflect(bind=engine)
 
