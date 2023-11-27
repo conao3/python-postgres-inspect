@@ -1,5 +1,6 @@
 import logging.config
 import argparse
+import re
 import sqlalchemy as sa
 import sqlalchemy.dialects.postgresql as sa_postgresql
 
@@ -24,6 +25,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', help='DB URL like postgresql://{username}:{password}@{host}:{port}/{database}', required=True)
     parser.add_argument('--schema', help='Schema name')
+    parser.add_argument('--exclude', help='Exclude tables in regexp')
 
     return parser.parse_args()
 
@@ -36,6 +38,9 @@ def main():
     metadata.reflect(bind=engine)
 
     for table in metadata.sorted_tables:
+        if args.exclude and re.fullmatch(args.exclude, table.name):
+            continue
+
         ddl = str(sa.schema.CreateTable(table).compile(dialect=sa_postgresql.dialect()))
         print('\n'.join([elm.rstrip() for elm in ddl.splitlines()]) + ";")
 
