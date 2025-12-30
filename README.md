@@ -1,46 +1,68 @@
-# python-postgres-inspect
+# postgres-inspect
 
-## Usage
+A lightweight command-line tool for inspecting PostgreSQL databases and generating DDL (Data Definition Language) statements.
 
-### Prepare database
+## Features
 
-Prepare database. You can use [docker-postgres-dvdrental](https://github.com/conao3-playground/docker-postgres-dvdrental) as a sample.
+- Extracts schema definitions from PostgreSQL databases
+- Generates clean, readable DDL output
+- Supports schema filtering and table exclusion patterns
+- Works with PostgreSQL and Redshift
 
-### Run
+## Installation
 
 ```bash
-$ poetry install
-$ poetry run postgres-inspect --url postgresql://postgres:postgres@localhost:15432/dvdrental
+poetry install
 ```
 
-### Sample output
+## Quick Start
 
-[Sample output is available](https://github.com/conao3/python-postgres-inspect/blob/master/sample/dvdrental/ddl.sql) for dvdrental database.
+```bash
+poetry run postgres-inspect --url postgresql://postgres:postgres@localhost:5432/mydb
+```
+
+For a sample database to experiment with, check out [docker-postgres-dvdrental](https://github.com/conao3-playground/docker-postgres-dvdrental).
 
 ## Options
 
 ### `--url <URL>`
 
-Required.  DB URL like this `postgresql://{username}:{password}@{host}:{port}/{database}`.
+**Required.** Database connection URL in the format:
+
+```
+postgresql://{username}:{password}@{host}:{port}/{database}
+```
 
 ### `--schema <SCHEMA>`
 
-Optional, default is `public`.  Target schema name.
+Target schema name. Defaults to `public`.
 
-### `--exclude <EXCLUDE>`
+### `--exclude <PATTERN>`
 
-Optional.  Exclude table name pattern using regex.
+Exclude tables matching a regex pattern (uses `re.search`).
 
-Regex is matched with `re.serch`.
+For example, to exclude date-partitioned tables like `user_20231127` or `store_20231127`:
 
-For example, if you want to exclude `user_20231127` and `store_20231127` and somethig like this, you can use `--exclude '_[0-9]+$'`.
-
-(Single quotes are required to avoid being recognised by the shell as a glob)
-
-## Tips
-
-Inspect Redshift, downgrade sqlalchemy to v1.  Ref: [amundsen-io/amundsen/issues/2105](https://github.com/amundsen-io/amundsen/issues/2105)
-
+```bash
+--exclude '_[0-9]+$'
 ```
+
+Note: Use single quotes to prevent shell glob expansion.
+
+## Sample Output
+
+See the [sample DDL output](https://github.com/conao3/python-postgres-inspect/blob/master/sample/dvdrental/ddl.sql) generated from the dvdrental database.
+
+## Working with Redshift
+
+For Redshift compatibility, downgrade SQLAlchemy to version 1.x:
+
+```bash
 poetry add 'sqlalchemy@^1'
 ```
+
+See [amundsen-io/amundsen#2105](https://github.com/amundsen-io/amundsen/issues/2105) for details.
+
+## License
+
+Apache-2.0
