@@ -11,7 +11,7 @@ postgres-inspect = "postgres_inspect.__main__:main"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-sqlalchemy = {extras = ["postgresql"], version = "^2.0.23"}
+sqlalchemy = {extras = ["postgresql"], version = "^2.1.6"}
 
 [build-system]
 requires = ["poetry-core"]
